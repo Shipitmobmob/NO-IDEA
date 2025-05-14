@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>بورسا کارەبێ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      direction: rtl;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 500px;
+      text-align: right;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #007BFF;
+      font-size: 28px;
+      font-weight: bold;
+      border-bottom: 2px solid #007BFF;
+      padding-bottom: 10px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .results {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f0f0f0;
+      border-radius: 5px;
+    }
+    .results p {
+      margin: 8px 0;
+    }
+    .site-image {
+      display: block;
+      max-width: 400px;
+      height: auto;
+      margin: 20px auto;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .image-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">بورسا کارەبێ</div>
+    
+    <div class="calculator">
+      <label for="kwh">یەکێن مەزاختنێ دابگرە</label>
+      <input type="number" id="kwh" placeholder="یەکێن مەزاختنێ دابگرە">
+      <button onclick="compareRates()">جوداهییا نرخی بزانە</button>
+      <div class="results" id="results"></div>
+    </div>
+    
+    <div class="image-container">
+      <img src="Untitled.png" alt="jmara" class="site-image">
+    </div>
+  </div>
+  
+  <script>
+    function compareRates() {
+      const kWh = parseFloat(document.getElementById("kwh").value);
+      if (isNaN(kWh) || kWh < 0) {
+        document.getElementById("results").innerHTML = "<p>تکایە ژمارەیەکی گونجاو بنووسە.</p>";
+        return;
+      }
+
+      let ronakiCost = 0;
+      let tariatiCost = 0;
+
+      // Ronaki rate system
+      if (kWh > 2000) {
+        ronakiCost = kWh * 350;
+      } else if (kWh <= 400) {
+        ronakiCost = kWh * 72;
+      } else if (kWh <= 800) {
+        ronakiCost = 400 * 72 + (kWh - 400) * 108;
+      } else if (kWh <= 1200) {
+        ronakiCost = 400 * 72 + 400 * 108 + (kWh - 800) * 175;
+      } else if (kWh <= 1600) {
+        ronakiCost = 400 * 72 + 400 * 108 + 400 * 175 + (kWh - 1200) * 265;
+      } else {
+        ronakiCost = 400 * 72 + 400 * 108 + 400 * 175 + 400 * 265 + (kWh - 1600) * 350;
+      }
+
+      // Tariati rate system
+      if (kWh > 1350) {
+        tariatiCost = kWh * 42;
+      } else if (kWh <= 450) {
+        tariatiCost = kWh * 18;
+      } else if (kWh <= 900) {
+        tariatiCost = 450 * 18 + (kWh - 450) * 24;
+      } else {
+        tariatiCost = 450 * 18 + 450 * 24 + (kWh - 900) * 42;
+      }
+
+      const difference = ronakiCost - tariatiCost;
+
+      document.getElementById("results").innerHTML = `
+        <p><strong>نرخێ روناکی:</strong> ${ronakiCost.toLocaleString()} IQD</p>
+        <p><strong>نرخێ تاریاتی:</strong> ${tariatiCost.toLocaleString()} IQD</p>
+        <p><strong>جوداهی:</strong> ${Math.abs(difference).toLocaleString()} IQD (${difference > 0 ? 'روناکی گرانترە' : 'تاریاتی گرانترە'})</p>
+      `;
+    }
+  </script>
+</body>
+</html>
